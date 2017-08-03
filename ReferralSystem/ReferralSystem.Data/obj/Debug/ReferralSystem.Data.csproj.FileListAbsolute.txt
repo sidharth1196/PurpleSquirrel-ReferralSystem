@@ -1,0 +1,10 @@
+F:\ReferralSystem\ReferralSystem.Data\bin\Debug\ReferralSystem.Data.dll.config
+F:\ReferralSystem\ReferralSystem.Data\bin\Debug\ReferralSystem.Data.dll
+F:\ReferralSystem\ReferralSystem.Data\bin\Debug\ReferralSystem.Data.pdb
+F:\ReferralSystem\ReferralSystem.Data\bin\Debug\EntityFramework.dll
+F:\ReferralSystem\ReferralSystem.Data\bin\Debug\EntityFramework.SqlServer.dll
+F:\ReferralSystem\ReferralSystem.Data\bin\Debug\EntityFramework.xml
+F:\ReferralSystem\ReferralSystem.Data\bin\Debug\EntityFramework.SqlServer.xml
+F:\ReferralSystem\ReferralSystem.Data\obj\Debug\ReferralSystem.Data.csprojResolveAssemblyReference.cache
+F:\ReferralSystem\ReferralSystem.Data\obj\Debug\ReferralSystem.Data.dll
+F:\ReferralSystem\ReferralSystem.Data\obj\Debug\ReferralSystem.Data.pdb

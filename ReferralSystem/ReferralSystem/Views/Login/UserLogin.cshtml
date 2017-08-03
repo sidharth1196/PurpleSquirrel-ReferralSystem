@@ -1,0 +1,63 @@
+﻿@model ReferralSystem.ServiceContracts.LoginViewModel
+@{
+    Layout = null;
+    
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+
+   
+   
+</head>
+
+<body style="background-color:whitesmoke">
+
+
+    
+@using (Html.BeginForm("Redirect", "Login", FormMethod.Post))
+{ 
+    <div class="login" style="background-color:midnightblue">
+        <h2 style="text-align:center">Log In</h2>
+        <fieldset>
+            
+            @Html.TextBoxFor(x => x.UserName, new { placeholder = "Username", required = "required" })
+
+           
+            @Html.TextBoxFor(x => x.Password, new { type = "password", placeholder = "Password", required = "required" })
+            
+            
+        </fieldset>
+        
+            <input type="submit" value="Log In" style="color:whitesmoke" />
+        
+        <div class="utilities">
+            @Html.ActionLink("Forgot Password", "ForgotPassword","Login")
+            @Html.CheckBox("RememberMe", false)
+            @Html.Label("Remember Me") 
+        </div>
+    </div>
+
+
+
+}
+
+
+
+    @{
+        if (ViewBag.MailSent == 1)   //Alert that password reset mail has been sent
+        {
+            <script>
+            alert("Password Reset instructions have been sent to your registered email-id");
+            </script>
+        }
+    }
+
+</body>
+</html>
+
+
+
+

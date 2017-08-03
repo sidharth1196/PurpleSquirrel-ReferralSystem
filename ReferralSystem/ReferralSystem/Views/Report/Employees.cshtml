@@ -1,0 +1,37 @@
+﻿@model List<ReferralSystem.ServiceContracts.EmployeeReportViewModel>
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/HRLayout.cshtml";
+}
+<div class="container">
+    <h3>Employees Report</h3>
+
+    <table class="table">
+        <tr>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Designation</th>
+            <th>DOB</th>
+            <th>Email</th>
+            <th>Phone No</th>
+            <th>Bonus</th>
+            <th>Score</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.MiddleName</td>
+                <td>@item.LastName</td>
+                <td>@item.Designation</td>
+                <td>@item.DOB</td>
+                <td>@item.Email</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.ReferralBonus</td>
+                <td>@item.ReferralsConverted</td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink("Download", "CreatePdf", "Report")
+</div>

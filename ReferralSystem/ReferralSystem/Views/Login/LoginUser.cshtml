@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "LoginUser";
+    Layout = null;
+    
+}
+
+<head>   
+
+    <script async="" src="//www.google-analytics.com/analytics.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <link rel="icon" href="~/Images/good-methods-global.png" type="image/x-icon"/>
+    <link href="~/Content/Login.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/toastr.js"></script>
+    <link type="text/css" rel="stylesheet" href="/Content/toastr.css" />
+
+</head>
+
+
+<script>
+  window.console = window.console || function(t) {};
+</script>
+<script>
+
+    if (document.location.search.match(/type=embed/gi)) {
+        window.parent.postMessage("resize", "*");
+    }
+</script>
+
+
+
+
+@{
+    if (ViewBag.MailSent == 1)   //Alert that password reset mail has been sent
+    {
+        <script>
+            alert("Password Reset instructions have been sent to your registered email-id");
+        </script>
+    }
+    
+}
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <h1><strong> PURPLE SQUIRREL</strong></h1>
+
+            <form class="form" action="/Login/Redirect" method="post">
+                <input class="input" style="color:black;" type="text" placeholder="Username" name="username" id="username" required>
+                <input class="input" style="color:black;" type="password" placeholder="Password" name="password" id="password" required>
+                <button type="submit" id="Login-button">Login</button><br /><br />
+                @Html.ActionLink("Forgot Password?", "ForgotPassword", "Login", new { @style="text-decoration:none; "})
+            </form>
+        </div>
+
+        <ul class="bg-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+
+
+
+    <script>
+            $(document).ready(function () {
+                if (@ViewBag.Message == 1) {
+
+            toastr.error("Please check the username and password.");
+
+    }
+            });
+        $("#login-button").click(function (event) {
+            event.preventDefault();
+
+           
+            $('form').fadeOut(500);
+            $('.wrapper').addClass('form-success');
+        });
+
+    </script>
+
+</body>
+
+
+
+

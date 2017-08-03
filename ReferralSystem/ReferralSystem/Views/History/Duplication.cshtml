@@ -1,0 +1,31 @@
+﻿@model List<ReferralSystem.ServiceContracts.HistoryViewModel> 
+@{
+    ViewBag.Title = "Duplication";
+    Layout = "~/Views/Shared/HRLayout.cshtml";
+}
+<h2>Duplication</h2>
+
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>Employee Name</th>
+            <th>CandidateName</th>
+            <th>Email</th>
+            <th>PhoneNumber</th>
+            <th>Post</th>
+            <th>Date</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr >
+                <td>@item.EmployeeName</td>
+                <td>@item.CandidateName</td>
+                <td>@item.Email</td>
+                <td>@item.PhoneNumber</td>>
+                <td>@item.Post</td>
+                <td>@item.Date</td>
+            </tr>
+        }
+    </table>
+</div>

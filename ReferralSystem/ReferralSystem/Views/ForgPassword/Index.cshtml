@@ -1,0 +1,110 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+
+
+<head>
+
+    <script async="" src="//www.google-analytics.com/analytics.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <link rel="icon" href="~/Images/good-methods-global.png" type="image/x-icon" />
+    <link href="~/Content/Login.css" rel="stylesheet" type="text/css" />
+</head>
+
+
+<script>
+  window.console = window.console || function(t) {};
+</script>
+<script>
+
+    if (document.location.search.match(/type=embed/gi)) {
+        window.parent.postMessage("resize", "*");
+    }
+</script>
+
+
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <h1><b>Purple Squirrel</b></h1>
+
+
+            @if (ViewBag.valid == 1)
+            {
+                <form action="/ForgPassword/SetNewPassword" method="post">
+                    <input  class="input" style="color:black;" type="text" value=@ViewBag.username readonly>
+                    <input  class="input" style="color:black;" type="password" placeholder="New Password" id="newpassword" name="newpassword" required oninput="validatePassword()">
+                    <p id="notice"></p>
+                    <input type="hidden" value=@ViewBag.userid id="userid" name="userid">
+                    <button id="Login-button" type="submit">Submit</button>
+                </form>
+
+            }
+            else
+            {
+                <h1>Sorry,The Link has expired.Please try again.</h1>
+            }
+        </div>
+
+        <ul class="bg-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+
+
+
+    <script>
+
+        
+        function validatePassword() {
+
+            var notice = document.getElementById("notice");
+            var p = document.getElementById('newpassword').value,
+                errors = [];
+            if (p.length < 8) {
+                errors.push("Use at least 8 characters");
+            }
+            if (p.search(/[a-z]/i) < 0) {
+                errors.push("Your password must contain at least one letter.");
+            }
+            if (p.search(/[0-9]/) < 0) {
+                errors.push("Your password must contain at least one digit.");
+            }
+            if (errors.length > 0) {
+
+
+                notice.innerHTML = errors.join(" and ");
+                notice.style.color = '#FF0000';
+                notice.style.fontWeight = 'bold';
+                document.getElementById("Login-button").disabled = true;
+            }
+            else {
+                notice.innerHTML = "Password is valid";
+                notice.style.color = '#006400';
+                notice.style.fontWeight = 'bold';
+                document.getElementById("Login-button").disabled = false;
+
+            }
+        }
+
+ </script>
+<script>
+    $('form').fadeOut(500);
+    $('.wrapper').addClass('form-success');
+    });
+    </script>
+</body>
+

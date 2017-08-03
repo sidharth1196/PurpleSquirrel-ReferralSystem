@@ -1,0 +1,355 @@
+﻿@model ReferralSystem.ServiceContracts.MyProfileViewModel 
+@{
+    ViewBag.Title = "MyProfile";
+    Layout = "~/Views/Shared/EmployeeLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script>
+    $(document).ready(function (e) {
+
+
+        $('.tab a').on('click', function (e) {
+
+            e.preventDefault();
+
+            $(this).parent().addClass('active');
+            $(this).parent().siblings().removeClass('active');
+            target = $(this).attr('href');
+
+            $('.tab-content > div').not(target).hide();
+
+            $(target).fadeIn(600);
+
+        });
+        
+
+    });
+    function checkMatch() {
+        var newPass = document.getElementById("newPassword");
+        var confPass = document.getElementById("confirmPassword");
+        var notice = document.getElementById("notice");
+
+        if (newPass.value != confPass.value) {
+            notice.innerHTML = "Passwords dont match!";
+            document.getElementById("changePassword").disabled = true;
+        }
+        else {
+            notice.innerHTML = "Passwords match!";
+            document.getElementById("changePassword").disabled = false;
+        }
+    }
+    function myFunction() {
+        document.getElementById("myForm").reset();
+    }
+</script>
+
+
+<div class="well col-md-10 col-md-offset-1" style="background-color:white;">
+
+<div class="container" style="margin-top: 30px;">
+    <div class="profile-head">
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <img src="~/Images/ProfilePicDefault.png" class="img-responsive" style="height:180px; width:220px;" />
+            
+        </div><!--col-md-4 col-sm-4 col-xs-12 close-->
+
+        <div class="col-md-8 col-sm-8 col-xs-12">
+            <div class="row" style="margin: 10px 10px 10px 10px;">
+                <h3 style="margin:auto;">@Model.FirstName @Model.MiddleName @Model.LastName</h3>
+            </div>
+            <div class="row" style="margin: 10px 10px 10px 10px;">
+                <h4 style="margin:auto;">@Model.Designation</h4>
+            </div>
+            
+            <div class="row well" style="margin: 30px 10px 10px 10px;">
+                <div class="col-md-1 col-sm-1">
+                <span><i class="fa fa-inr" style="font-size:30px; margin-top:10px;"></i></span>
+                    
+                </div>
+                <div class="col-md-5 col-sm-5">
+                    <h4 style="align-content:center;">Bonus: @Model.ReferralBonus</h4>
+                </div>
+                <div class="col-md-1 col-sm-1">
+                <span><i class="fa fa-address-book" style="font-size:30px; margin-top:10px"></i></span>
+
+                    
+                </div>
+                <div class="col-md-5 col-sm-5" >
+                    <h4 style="align-self:center;">Score: @Model.ReferralsConverted</h4>
+                </div>
+            </div>
+
+        </div><!--col-md-8 col-sm-8 col-xs-12 close-->
+
+
+    </div><!--profile-head close-->
+</div><!--container close-->
+</div>
+<div class=" container">
+    
+        <ul class="nav nav-tabs nav-menu" role="tablist">
+            <li class="active">
+                <a href="#profile" role="tab" data-toggle="tab">
+                    <i class="fa fa-male"></i> Profile
+                </a>
+            </li>
+            <li>
+                <a href="#change" role="tab" data-toggle="tab">
+                    <i class="fa fa-key"></i>   Edit Profile
+                </a>
+            </li>
+        </ul><!--nav-tabs close-->
+    
+        
+    
+    
+</div>
+<div class="col-md-10 col-md-offset-1 well" style="background-color:#e6e4c2">
+    <div class="tab-content">
+        <div class="tab-pane fade active in" id="profile">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="pro-title">Personal Information</h4>
+                    </div><!--col-md-12 close-->
+
+                    <div class="col-md-6">
+                        <div class="table-responsive responsiv-table">
+                            <table class="table bio-table">
+                                <tbody>
+                                    <tr>
+                                        <td>Firstname</td>
+                                        <td>@Model.FirstName</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Middlename</td>
+                                        <td>@Model.MiddleName</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lastname</td>
+                                        <td>@Model.LastName</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td>@Model.Email</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PhoneNumber</td>
+                                        <td>@Model.PhoneNumber</td>
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+                        </div><!--table-responsive close-->
+                    </div><!--col-md-6 close-->
+                </div><!--row close-->
+
+
+            </div><!--container close-->
+        </div><!--tab-pane close-->
+
+            <div class="tab-pane fade" id="change">
+                <div class="container fom-main">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h2 class="register">Edit Your Profile</h2>
+                        </div><!--col-sm-12 close-->
+                    </div><!--row close-->
+                    <br />
+                    <div class="row">
+                        <form class="form-horizontal main_form text-left" action=" " method="post" id="contact_form">
+                            <fieldset>
+
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-3">First Name</label>
+                                    <div class="col-md-9 inputGroupContainer">
+                                        <div class="input-group">
+                                            <input name="first_name" id="firstName" value=@Model.FirstName class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-3">Middle Name</label>
+                                    <div class="col-md-9 inputGroupContainer">
+                                        <div class="input-group">
+                                            <input name="middle_name" id="middleName" value=@Model.MiddleName class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-3">Last Name</label>
+                                    <div class="col-md-9 inputGroupContainer">
+                                        <div class="input-group">
+                                            <input name="last_name" id="lastName" value=@Model.LastName class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-3">E-Mail</label>
+                                    <div class="col-md-9 inputGroupContainer">
+                                        <div class="input-group">
+                                            <input name="email" id="email" value=@Model.Email class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-3">Phone Number</label>
+                                    <div class="col-md-9 inputGroupContainer">
+                                        <div class="input-group">
+                                            <input name="phone" id="phoneNumber" value=@Model.PhoneNumber class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <a href="#" data-toggle="modal" data-target="#myModal">Change Password</a>
+                                
+                                <!-- Button -->
+                                <div class="form-group col-md-10">
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-warning submit-button" onclick="saveChanges();">Save</button>
+                                        <button type="submit" class="btn btn-warning submit-button">Cancel</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div><!--row close-->
+                </div><!--container close -->
+            </div><!--tab-pane close-->
+        </div><!--tab-content close-->
+        <!-- Nav tabs -->
+ </div>
+
+
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" onclick="myFunction()">&times;</button>
+                    <h4 class="modal-title">Change Password</h4>
+                </div>
+                <fieldset>
+                    <form id="myForm">
+                        <div class="modal-body">
+
+                            <div class="form-group col-md-5">
+                                <label>Current Password:</label><br /><br />
+                                <label>New Password:</label><br /><br />
+                                <label>Confirm Password:</label>
+
+                            </div>
+                            <div class="form-group col-md-5">
+                                <input type="password" id="currentPassword" /><br /><br />
+                                <input type="password" id="newPassword" oninput="validatePassword()"/><br /><br />
+                                <input type="password" id="confirmPassword" oninput="checkMatch();" />
+                                <p id="notice"></p>
+                            </div>
+
+
+                        </div>
+                        
+                    </form>
+                </fieldset>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="myFunction()">Cancel</button>
+                    <button class="btn" value="Submit" type="submit" data-dismiss="modal" id="changePassword" onclick="changePass();">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function saveChanges() {
+            var data = new FormData();
+            data.append("EmployeeID", @Session["UserID"] );
+            data.append("FirstName", $("#firstName").val());
+            data.append("MiddleName", $("#middleName").val());
+            data.append("LastName", $("#lastName").val());
+            data.append("Email", $("#email").val());
+            data.append("PhoneNumber", $("#phoneNumber").val());
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("EditProfile", "EmployeeProfile")",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (data) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": true,
+                        "progressBar": false,
+                        "positionClass": "toast-top-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["info"](data.message, "Notification");
+
+                },
+
+            });
+        }
+
+        function changePass() {
+            var data = new FormData();
+            data.append("EmployeeID", @Session["UserID"]);
+            data.append("CurrentPassword", $("#currentPassword").val());
+            data.append("NewPassword", $("#newPassword").val());
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ChangePassword", "Login")",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (data) {
+                    alert(data.message);
+                },
+            });
+        }
+        function validatePassword() {
+
+            var notice = document.getElementById("notice");
+            var p = document.getElementById('newPassword').value,
+                errors = [];
+            if (p.length < 8) {
+                errors.push("Use at least 8 characters");
+            }
+            if (p.search(/[a-z]/i) < 0) {
+                errors.push("Your password must contain at least one letter.");
+            }
+            if (p.search(/[0-9]/) < 0) {
+                errors.push("Your password must contain at least one digit.");
+            }
+            if (errors.length > 0) {
+
+
+                notice.innerHTML = errors.join(" and ");
+                notice.style.color = '#FF0000';
+                notice.style.fontWeight = 'bold';
+                document.getElementById("changePassword").disabled = true;
+            }
+            else {
+                notice.innerHTML = "Password is valid";
+                notice.style.color = '#006400';
+                notice.style.fontWeight = 'bold';
+                document.getElementById("changePassword").disabled = false;
+
+            }
+        }
+    </script>

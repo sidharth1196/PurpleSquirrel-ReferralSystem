@@ -1,0 +1,98 @@
+﻿@model ReferralSystem.ServiceContracts.EmployeeProfileViewModel
+@{
+    ViewBag.Title = "Purple Squirrel-Employee Profile";
+    Layout = "~/Views/Shared/HRLayout.cshtml";
+}
+
+
+
+<div class="well col-md-10 col-md-offset-1" style="background-color:white;">
+    
+    <h3 style="text-align:left; " >@Model.employeedetails.Name</h3>
+    <hr />    
+    <div class="row">
+        <div class="col-md-3">
+            <label>Designation:</label>
+        </div>
+        <div class="col-md-3">
+            @Model.employeedetails.Designation
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Phonenumber:</label>
+        </div>
+        <div class="col-md-3">
+            @Model.employeedetails.PhoneNumber
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Email:</label>
+        </div>
+        <div class="col-md-3">
+            @Model.employeedetails.Email
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Bonus:</label>
+        </div>
+        <div class="col-md-3">
+            @Model.employeedetails.Bonus
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Score:</label>
+        </div>
+        <div class="col-md-3">
+            @Model.employeedetails.Score
+        </div>
+    </div>        
+</div>
+
+
+<div class="container-fluid col-md-10 col-md-offset-1 well grad2">
+    <h3 >Referrals</h3>
+    <hr/>
+    <table class="table" id="profilereferrals" >
+        <thead>
+            <tr>
+                <th>Candidate Name</th>
+                <th>Applied Post</th>
+                <th>Experience</th>
+                <th>Bonus</th>
+                <th>Status</th>
+
+
+            </tr>
+        </thead>
+        @foreach (var item in Model.referraldetails)
+        {
+            <tr>
+                <td>@Html.ActionLink(
+                                linkText: item.CandidateName,
+                                actionName: "CandidateProfile",
+                                controllerName: "Candidate_Profile",
+                                routeValues: new
+                                {
+                                    ReferralID = item.ReferralID
+
+                                },
+                                htmlAttributes: new { target = "_blank" }
+                                )
+                </td>
+                <td>@item.Post</td>
+                <td>@item.Experience</td>
+                <td>@item.Bonus</td>
+                <td>@item.Status</td> 
+            </tr>
+        }
+    </table>
+    <script>
+        $(document).ready(function () {
+            $('#profilereferrals').DataTable();
+        });
+    </script>
+</div>

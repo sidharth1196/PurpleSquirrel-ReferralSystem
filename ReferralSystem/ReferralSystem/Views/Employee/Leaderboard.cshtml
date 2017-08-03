@@ -1,0 +1,63 @@
+﻿@model List<ReferralSystem.ServiceContracts.LeaderboardViewModel> 
+@{
+    ViewBag.Title = "Leaderboard";
+    Layout = "~/Views/Shared/EmployeeLayout.cshtml";
+    var trophyCount = 0;
+    var prevScore = -1;
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+<div class="col-md-10 col-md-offset-1 well" style="background-color:white;">
+    <h2 style="">Leaderboard</h2>
+</div>
+<div class="col-md-10 col-md-offset-1 well"  style="background-color:#e6e4c2">
+    <div style="overflow-y:scroll; height:500px;">
+        <table class="table" id="leaderboardtable">
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Employee Name</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    @{ if (prevScore != Convert.ToInt16(@item.Score))
+                        { trophyCount++; }
+                        switch (trophyCount)
+                        {
+                            case 1: <td><i class="fa fa-trophy" style="color:gold;font-size:15px;"></i></td>break;
+                            case 2: <td><i class="fa fa-trophy" style="color:silver;font-size:15px;"></i></td>break;
+                            case 3: <td><i class="fa fa-trophy" style="color:#cd7f32;font-size:15px;"></i></td>break;
+
+                            default: <td>@trophyCount</td> break;
+                        }
+                    }
+                    
+                    @{
+                       
+                        if (item.EmployeeID == Convert.ToInt16(Session["UserID"]))
+                        {
+                            <td style="font-weight:bold">@item.EmployeeName<span class="glyphicon glyphicon-user"></span></td>
+                        }
+                        else
+                        {
+                            <td>@item.EmployeeName</td>
+                        }
+                    }
+                    <td>@item.Score</td>
+                    @{
+                       
+                        prevScore = Convert.ToInt16(@item.Score);
+                    }
+                </tr>
+                        }
+        </table>
+    </div>
+</div>
+

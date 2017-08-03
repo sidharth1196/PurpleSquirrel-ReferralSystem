@@ -1,0 +1,321 @@
+﻿@model ReferralSystem.ServiceContracts.HRLandingViewModel
+@{ Layout = "~/Views/Shared/HRLayout.cshtml";
+    ViewBag.Title = "Purple Squirrel-Home";
+    Dictionary<int, string> statuses = ViewBag.Statuses;
+
+
+    int count = 0;
+    int slno = 0;
+
+
+}
+
+<script>
+    window.onload = function () {
+        TabFunction(@ViewBag.Tab);
+    }
+</script>
+
+
+
+<body onload="TabFunction(@ViewBag.Tab)">
+
+
+   
+        <div class="col-md-10 col-md-offset-1 well" style="background-color:white;">
+            <ul class="nav nav-tabs">
+                <li id="applicantstab"><a data-toggle="tab" href="#applicants">Applicants</a></li>
+                <li id="recruitstab"><a data-toggle="tab" href="#recruits">Recruits</a></li>
+            </ul>
+        </div>
+        <br />
+        <div class="col-md-10 col-md-offset-1 well tab-content grad2">
+            <div id="applicants">
+                <table id="applicantstable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>Date</th>
+                            <th>Candidate Name</th>
+                            <th>Phone Number</th>
+                            <th>Location</th>
+                            <th>Referee</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    @{
+
+                        foreach (var item in Model.Referrals)
+                        {
+                            slno = slno + 1;
+                            <tr>
+                                <td>@slno</td>
+                                <td>@item.ReferDate</td>
+                                <td>
+                                    @Html.ActionLink(
+                                     linkText: item.CandidateName,
+                                     actionName: "CandidateProfile",
+                                     controllerName: "Candidate_Profile",
+                                     routeValues: new
+                                     {
+                                         ReferralID = item.ReferralID
+
+                                     },
+                                     htmlAttributes: new { target = "_blank" }
+                                     )
+                                </td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.Location</td>
+                                <td>
+                                    @Html.ActionLink(
+                                    linkText: item.EmployeeName,
+                                    actionName: "EmployeeProfile",
+                                    controllerName: "Employee_Profile",
+                                    routeValues: new { EmployeeID = item.EmployeeID },
+                                    htmlAttributes: new { target = "_blank" }
+                                    )
+                                </td>
+                                <td>
+                                    @{
+                                    SelectList selectListFromDictionary = new SelectList(
+                                    Model.Statuses.Select(x => new { value = x.Key, text = x.Value }),
+                                    "value",
+                                    "text", item.StatusID
+                                    );
+                                    }
+                                    @Html.DropDownList("StatusList", selectListFromDictionary, new { id = @item.ReferralID, data_value = @item.ReferralID, data_jobid = @item.JobID, onchange = "ChangeinStatus(value,'" + item.ReferralID + "','" + item.JobID + "')", onfocus = "PrevValue(value,'" + item.ReferralID + "','" + item.JobID + "')" })
+
+
+                        </td>
+
+                    </tr>
+                        }
+                    }
+                    
+                </table>
+            </div>
+            <div id="recruits" >
+                <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="recruitstable">
+                    <thead>
+                        <tr>
+                            <th>Candidate Name</th>
+                            <th>Employee Name</th>
+                            <th>Post</th>
+                            <th>Joining Date</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.Recruits)
+                    {
+                        count++;
+                        <tr>
+                            <td>
+                                @Html.ActionLink(
+                                 linkText: item.Name,
+                                 actionName: "CandidateProfile",
+                                 controllerName: "Candidate_Profile",
+                                 routeValues: new
+                                 {
+                                     ReferralID = item.ReferralID
+
+                                 },
+                                 htmlAttributes: new { target = "_blank" }
+                                 )
+                            </td>
+                            <td>@item.EmployeeName</td>
+                            <td>@item.Post</td>
+                            <td id="@("tr"+count)">
+                                <div class="col-md-4">@item.JoiningDate</div>  
+                                <div class="col-md-4">
+                                    <a style="float:right;" href"#" name="edit" value="@item.JoiningDate"onclick="editfunc(@count,@item.ReferralID,@item.JoiningDate)"alt="Edit"  >Edit</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a style="float:right;" href="#" name="remove" alt="Remove" value="@item.ReferralID" onclick="removeRecruit(@count,@item.ReferralID)">Remove</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+   
+
+
+
+
+
+<script>
+        $(document).ready(function () {
+            $('#applicantstable').DataTable();
+        });
+        $(document).ready(function () {
+            $('#recruitstable').DataTable();
+        });
+</script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="modal-title">
+                       Joining Date
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="recruitForm">
+                        <input type="hidden" id="StatusID" />
+                        <input type="hidden" id="ReferralID" />
+                        <input type="hidden" id="JobID" />
+                        <input type="date" class="form-control" id="JoiningDate" placeholder="JoiningDate">
+                        <br/>                       
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button data-dismiss="modal" class="btn" id="RecruitCandidate">Submit</button>                    
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+
+<script>
+
+    $(document).ready(function () {
+        $("#RecruitCandidate").click(function () {
+            var data = new FormData();
+            data.append("StatusID", $("#StatusID").val());
+            data.append("JobID", $("#JobID").val());
+            data.append("ReferralID", $("#ReferralID").val());
+            data.append("JoiningDate", $("#JoiningDate").val());
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Selected", "HR")",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (data) {
+                    alert(data.message);
+                    location.reload();
+                }
+            });
+        });
+    });
+     var Previous;
+
+    function PrevValue(StatusID,ReferralID,JobID)
+    {
+
+        Previous = StatusID;
+    }
+
+
+    function ChangeinStatus(StatusID, ReferralID, JobID) {
+
+        var statusid = StatusID;
+        var jobid = JobID;
+        var referralid = ReferralID;
+        var sure = confirm('Are you sure?');
+        if (sure) {
+
+            if (statusid == 3) {
+                $("#myModal").modal()
+                var ID1 = document.getElementById('StatusID');
+                ID1.value = statusid;
+                var ID2 = document.getElementById('ReferralID');
+                ID2.value = referralid;
+                var ID3 = document.getElementById('JobID');
+                ID3.value = jobid;
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateStatus", "HR")",
+
+                    data: { StatusID: statusid, ReferralID: referralid },
+                    success: function (data) {
+                        alert("Status Updated!")
+                    }
+                });
+            }
+
+        }
+        else {
+            document.getElementById(ReferralID).value = Previous
+
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+    function editfunc(rowid, referralid,joiningdate)
+    {
+
+        var row = document.getElementById("tr"+rowid);
+        var refid = referralid;
+      
+
+        row.innerHTML = '<form action="/HR/ChangeDate" method="post"><input type="hidden" name="referralid" id="referralid"><input type="date" name="changedate" id="changedate"/><button class="btn" style="float:right;" type="submit"><span class="glyphicon glyphicon-ok"></span></button> <button type="cancel" class="btn" style="float:right; margin-right:5px;"><span class="glyphicon glyphicon-remove"></span></button></form>'
+
+        document.getElementById("referralid").value = referralid;
+        document.getElementById("changedate").value = joiningdate;
+
+    }
+    function removeRecruit(rowid, referralid) {
+        var refid = referralid;
+        var sure = confirm("Are You Sure?");
+        if (sure == true) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DeleteRecruit", "HR")",
+                data: { ReferralID: referralid },
+                success: function (data) {
+                    alert(data.message);
+                    location.reload();
+                }
+            });
+        }
+
+    }
+
+    function TabFunction(tabno) {
+        if (tabno == 1)
+        {document.getElementById("applicantstab").className ="active";
+
+        document.getElementById("applicants").className="tab-pane fade in active";
+        document.getElementById("recruits").className = "tab-pane fade";
+
+
+        }
+        else if (tabno == 2)
+        {document.getElementById("recruitstab").className="active";
+        document.getElementById("recruits").className="tab-pane fade in active";
+        document.getElementById("applicants").className = "tab-pane fade ";
+
+        }
+
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,113 @@
+﻿@model List<ReferralSystem.ServiceContracts.MyReferralViewModel>
+@{
+    ViewBag.Title = "MyReferral"; ;
+    Layout = "~/Views/Shared/EmployeeLayout.cshtml";
+}
+
+
+<div class="col-md-10 col-md-offset-1 well" style="background-color:white;">
+    <h2 style="">My Referrals</h2>
+</div>
+<div class="col-md-10 col-md-offset-1 well"  style="background-color:#e6e4c2">
+<table id="employeemyreferrals"  class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>CandidateName</th>
+            <th>Post</th>
+            <th>Experience</th>
+            <th>Bonus</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CandidateName</td>
+            <td>@item.Post</td>
+            <td>@item.Experience</td>
+            <td>@item.Bonus</td>
+            @if (@item.Redeem == 0)
+            {
+                <td><a style="color:red;" href="#" onclick="Redeem('@item.ReferralID');">Redeem</a></td>
+            }
+
+            else if (@item.Redeem == -1)
+            {
+                <td>@item.Status</td>
+            }
+
+            else
+            {
+                <td><a style="color:blue;" href="#" onclick="checkStatus('@item.Redeem');">@item.Status</a></td>
+
+            }
+                
+        </tr>
+    }
+</table>
+
+
+   
+    <script>
+            $(document).ready(function () {
+                $('#employeemyreferrals').DataTable();
+            });
+    </script>
+</div>
+
+<script>
+    function checkStatus(item) {
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-center",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+                toastr["info"]("Please wait for "+ item + " more days to redeem the bonus." , "Notification");
+    }
+
+    function Redeem(item) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Redeem", "Refer")",
+            data: {
+                ID: item, empID: @Session["UserID"],
+                },
+            success: function (data) {
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-center",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+                toastr["info"](data.message, "Notification");
+                toastr.options.onHidden = function () { location.reload(); };
+            },
+
+        });
+    }
+</script>
+
+

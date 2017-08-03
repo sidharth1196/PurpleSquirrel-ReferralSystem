@@ -1,0 +1,195 @@
+﻿@model ReferralSystem.ServiceContracts.TemporaryViewModel
+
+@{  if (Model.MiddleName == " ")
+    { Model.MiddleName = null; }
+    if (string.IsNullOrEmpty(Model.MiddleName))
+
+    {
+        ViewBag.MiddleNameplace = "MiddleName";
+
+    }
+    else
+    {
+        ViewBag.MiddleNameplace = Model.MiddleName;
+    }
+}
+<head>
+    <title>Register</title>
+    <link type="text/css" rel="stylesheet" href="~/Content/register.css" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+</head>
+
+<body>
+    
+    <div class="container">
+        <div id="contact">
+            <h3>Welcome, @Model.FirstName </h3>
+            <h4>Please fill out the form</h4>
+            <fieldset>
+
+                <label>Name:</label>
+                <input placeholder=@Model.FirstName value=@Model.FirstName id="FirstName" type="text" tabindex="1" required autofocus>
+            </fieldset>
+            <fieldset>
+                <input type="text" id="MiddleName" placeholder=@ViewBag.MiddleNameplace value=@Model.MiddleName>
+            </fieldset>
+            <fieldset>
+                <input type="text" placeholder=@Model.LastName value=@Model.LastName id="LastName" tabindex="3" required>
+            </fieldset>
+            <fieldset>
+                <label>DOB:</label>
+                <input type="date" id="DateOfBirth" tabindex="4" max="1999-01-01" required>
+            </fieldset>
+            <fieldset>
+                <label>Email:</label>
+                <input type="text" placeholder=@Model.Email value=@Model.Email id="Email" tabindex="5" required />
+            </fieldset>
+            <fieldset>
+                <label>Phone Number:</label>
+                <input type="text" placeholder="Phonenumber" id="PhoneNumber" tabindex="6" required />
+            </fieldset>
+            <fieldset>
+                <label>Username:</label>
+                <input type="text" placeholder="Username" id="UserName" name="UserName" tabindex="7" oninput="checkUser();" required />
+                <p id="usernameresult" style="font-weight:bold"></p>
+            </fieldset>
+            <fieldset>
+                <label>Password:</label>
+                <input type="password" placeholder="Password" id="Password" disabled  required oninput="validatePassword()" />
+            </fieldset>
+            <fieldset>
+                <input type="password" placeholder="Confirm Password" id="confirm_password" disabled required oninput="checkMatch();" />
+                <p id="notice"></p>
+            </fieldset>
+            <input type="hidden" id="TemporaryEmployeeID" value=@Model.TemporaryEmployeeID>
+            <input type="hidden" id="Designation" value=@Model.Designation>
+            <fieldset>
+                <button type="submit" id="RegisterCandidate" disabled>Submit</button>
+            </fieldset>
+        </div>
+    </div>
+    <script>
+
+        $(document).ready(function () {
+            $("#RegisterCandidate").click(function () {
+
+                var data = new FormData();
+                data.append("UserName", $("#UserName").val());
+                data.append("Password", $("#Password").val());
+                data.append("TemporaryEmployeeID", $("#TemporaryEmployeeID").val());
+                data.append("FirstName", $("#FirstName").val());
+                data.append("MiddleName", $("#MiddleName").val());
+                data.append("LastName", $("#LastName").val());
+                data.append("Email", $("#Email").val());
+                data.append("Designation", $("#Designation").val());
+                data.append("DateOfBirth", $("#DateOfBirth").val());
+                data.append("PhoneNumber", $("#PhoneNumber").val());
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("RegisterEmployee", "Register")",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (data) {
+                        debugger;
+                        window.location.href = '/Login/LoginUser'
+                    }
+                });
+            });
+        });
+
+        function checkMatch() {
+            var newPass = document.getElementById("Password");
+            var confPass = document.getElementById("confirm_password");
+            var notice = document.getElementById("notice");
+
+            if (newPass.value != confPass.value) {
+                notice.innerHTML = "Passwords dont match!";
+                document.getElementById("RegisterCandidate").disabled = true;
+            }
+            else {
+                notice.innerHTML = "Passwords match!";
+                document.getElementById("RegisterCandidate").disabled = false;
+            }
+        }
+
+
+
+        function checkUser() {
+            if ($(UserName).val().length === 0) {
+                $("#usernameresult").html(' ');
+                $("#RegisterCandidate").attr("disabled", true)
+                $("#Password").attr("disabled", true)
+                $("#confirm_password").attr("disabled", true)
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("checkAvailability","Register")",
+                    data: {
+                        Username: $("#UserName").val(),
+
+                    },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $("#Password").attr("disabled", false)
+                            $("#confirm_password").attr("disabled", false)
+                            $("#usernameresult").attr("style", "color:#006400 ;")
+                            $("#usernameresult").html('Username is Available!');
+                        } else {
+
+                            $("#RegisterCandidate").attr("disabled", true)
+                            $("#Password").attr("disabled", true)
+                            $("#confirm_password").attr("disabled", true)
+                            $("#usernameresult").attr("style", "color:red;")
+                            
+                            $("#usernameresult").html('Unavailable');
+
+                        }
+                    }
+                });
+            }
+
+        }
+
+
+        function validatePassword() {
+
+            var notice = document.getElementById("notice");
+            var p = document.getElementById('Password').value,
+                errors = [];
+            if (p.length < 8) {
+                errors.push("Use at least 8 characters");
+            }
+            if (p.search(/[a-z]/i) < 0) {
+                errors.push("Your password must contain at least one letter.");
+            }
+            if (p.search(/[0-9]/) < 0) {
+                errors.push("Your password must contain at least one digit.");
+            }
+            if (errors.length > 0) {
+
+
+                notice.innerHTML = errors.join(" and ");
+                notice.style.color = '#FF0000';
+                notice.style.fontWeight = 'bold';
+                document.getElementById("RegisterCandidate").disabled = true;
+            }
+            else {
+                notice.innerHTML = "Password is valid";
+                notice.style.color = '#006400';
+                notice.style.fontWeight = 'bold';
+                document.getElementById("RegisterCandidate").disabled = false;
+
+            }
+            }
+
+
+
+
+
+
+
+    </script>
+</body>

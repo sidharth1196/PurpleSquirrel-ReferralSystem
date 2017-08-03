@@ -1,0 +1,87 @@
+﻿
+@{
+    var user = User as ReferralSystem.Framework.Security.ReferralSystemPrincipal;
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title </title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.11.0.js"></script>
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" id="font-awesome-css" href="~/Content/font-awesome.min.css" type="text/css" media="screen">
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="~/Content/jquery.dataTables.min.css">
+    <script src="~/Scripts/toastr.js"></script>
+    <link type="text/css" rel="stylesheet" href="~/Content/toastr.css" />
+</head>
+
+<body style="background-color:#ebe9ce; font-family:Verdana, Geneva, Tahoma, sans-serif;" class="">
+  
+
+    <nav class="navbar navbar-default navbar-fixed-top" style="background-color:white">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" style="color:#07cbd2;" href="#">PURPLE SQUIRREL</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+
+                <ul class="nav navbar-nav navbar-right nav-tabs">
+                    <li class="curent" data-toggle="tooltip" title="Go to home page">@Html.ActionLink("Jobs", "EmployeeLanding", "Employee")</li>
+                    <li class="curent" data-toggle="tooltip" title="Go to your refrrals">@Html.ActionLink("My Referrals", "MyReferral", "Employee", new { employeeID = Session["UserID"] }, null)</li>
+                    
+                    <li class="dropdown" >
+                        <a  class="dropdown-toggle curent" data-toggle="dropdown" href="#" aria-expanded="undefined">@HttpContext.Current.User.Identity.Name<span class="glyphicon glyphicon-user pull-right" style="padding-left:5px; padding-top:2px;"></span></a>
+                        <ul class="dropdown-menu" >
+                            <li class="curent" data-toggle="tooltip" title="Go to your Profile">@Html.ActionLink("Profile", "MyProfile", "Employee", new { employeeID = Session["UserID"] }, null)</li>
+                            <li class="curent" data-toggle="tooltip" title="Go to Leaderboard">@Html.ActionLink("Leaderboard", "Leaderboard", "Employee", new { employeeID = Session["UserID"] }, null)</li>
+                            <li  title="Logout from your profile">@Html.ActionLink("Logout", "Logout", "Login")</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+
+
+    
+
+    @RenderBody()
+    <div style="clear:both"></div>
+   
+        
+        <footer class="container-fluid">
+
+           @* <div style="float:left; ">
+        <img src="~/Images/good-methods-global.png" style="width:60%; height:60%;" />
+    </div>
+        *@
+            <div class="columns copyright-footer small-12 small-centered">
+                <p class="subtext text-center">Copyright © 2017 Good Methods Global Inc.</p>
+               
+            </div>
+
+           
+            
+        </footer>
+        
+
+
+
+
+    
+</body>
+</html>
+

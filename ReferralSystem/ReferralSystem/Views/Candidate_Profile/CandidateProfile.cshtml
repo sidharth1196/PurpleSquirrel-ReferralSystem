@@ -1,0 +1,350 @@
+﻿@model ReferralSystem.ServiceContracts.CandidateProfileViewModel 
+@{ 
+    Layout = "~/Views/Shared/HRLayout.cshtml";
+    ViewBag.Title = "Purple Squirrel-Candidate Profile";
+}
+
+<script>
+    window.onload = function () {
+        if (@Model.HistoryViewModel.Count == 0)
+            document.getElementById("previousHistory").disabled = true;
+    }
+</script>
+<div class="row">
+    <div class="well col-md-10 col-md-offset-1" style="background-color:white;">
+        @*Post*@
+        <h2>
+            @Model.JobName
+        </h2>
+        <hr />
+        <div class="row">
+            <label class="col-md-2">Description:</label>
+            <div class="col-md-9">
+                @Model.SkillSet
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <label class="col-md-2">Experience:</label>
+            <div class="col-md-9">
+                @Model.Experience
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <label class="col-md-2">Vacancies:</label>
+            <div class="col-md-9">
+                @Model.Vacancies
+            </div>
+        </div>
+        
+        
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 well col-md-offset-1 candidatePage">
+            <h3 style="text-align:left;">Candidate Details</h3>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Name Of Candidate:</label>
+                </div>
+                <div class="col-md-6">
+                    @Model.CandidateName
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Phone Number:</label>
+                </div>
+                <div class="col-md-6">
+                    @Model.PhoneNumber
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>E-mail:</label>
+                </div>
+                <div class="col-md-6">
+                    @Model.Email
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Location:</label>
+                </div>
+                <div class="col-md-6">
+                    @Model.Location
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Experience:</label>
+                </div>
+                <div class="col-md-6">
+                    @Model.CandidateExperience
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Status:</label>
+                </div>
+                <div class="col-md-6">
+                    @*Status Dropsdown*@
+                    @{SelectList selectListFromDictionary = new SelectList(
+                    Model.Statuses.Select(x => new { value = x.Key, text = x.Value }),
+                    "value",
+                    "text", Model.StatusID
+                    );
+                    }
+                    @Html.DropDownList("StatusList", selectListFromDictionary, new { data_value = @Model.ReferralID, data_jobid = @Model.JobID, id = "dd1", onfocus = "PrevValue(value,'" + Model.ReferralID + "','" + Model.JobID + "')" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Resume:</label>
+                </div>
+                @{
+                    if (Model.ResumeID != null)
+                    {
+                    <div class="col-md-6">
+                        @Html.ActionLink("Download Resume", "Downloadfile", "Candidate_Profile", new { referralid = Model.ReferralID }, new { @class = "btn" })
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="col-md-6">
+                        <text>The resume for this candidate was not uploaded.</text>
+                    </div>
+                    }
+                }
+            </div>
+            </div>
+
+
+        <div class="well col-md-5 candidatePage">
+            <h3 style="text-align :left; ">Referee Details</h3>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Name of Employee:</label>
+                </div>
+                <div class="col-md-6">
+                    @Model.EmployeeName
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Email:</label>
+                </div>
+                <div class="col-md-6">
+                    @Model.EmployeeEmail
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Phone No.:</label>
+                </div>
+                <div class="col-md-6">
+                    @Model.EmployeePhoneNumber
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Candidate may have been referred before: </label>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn" id="previousHistory" data-toggle="collapse" data-target="#history">Previous History </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="history" class="collapse">
+            <div class="container-fluid col-md-10 col-md-offset-1 well grad2">
+                <table class="table table-striped table-bordered" cellspacing="0" id="historytable">
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>CandidateName</th>
+                            <th>Email</th>
+                            <th>PhoneNumber</th>
+                            <th>Post</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.HistoryViewModel)
+                    {
+                    <tr>
+                        <td>@item.EmployeeName</td>
+                        <td>@item.CandidateName</td>
+                        <td>@item.Email</td>
+                        <td>@item.PhoneNumber</td>>
+                        <td>@item.Post</td>
+                        <td>@item.Date</td>
+                        <td>@item.Status</td>
+                    </tr>
+                    }
+                </table>            
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#historytable').DataTable();
+        });
+    </script>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="modal-title">
+                    Joining Date
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="recruitForm">
+                    <input type="hidden" id="StatusID" />
+                    <input type="hidden" id="ReferralID" />
+                    <input type="hidden" id="JobID" />
+                    <input type="date" class="form-control" id="JoiningDate" placeholder="JoiningDate">
+                    <br />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button data-dismiss="modal" class="btn btn-default" id="RecruitCandidate">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#RecruitCandidate").click(function () {
+            var data = new FormData();
+            data.append("StatusID", $("#StatusID").val());
+            data.append("JobID", $("#JobID").val());
+            data.append("ReferralID", $("#ReferralID").val());
+            data.append("JoiningDate", $("#JoiningDate").val());
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Selected", "HR")",
+                contentType: false,
+            processData: false,
+            data: data,
+            success: function (data) {
+                alert(data.message);
+                location.reload();
+            }
+        });
+    });
+    });
+
+
+
+
+
+
+
+
+
+
+    var Previous;
+
+    function PrevValue(StatusID,ReferralID,JobID)
+    {
+
+        Previous = StatusID;
+    }
+
+
+    $(document).ready(function () {
+        $("#dd1").change(function () {
+            var dd = $(this);
+            var statusid = dd.val();
+            var jobid = dd.data('jobid');
+            var referralid = dd.data('value');
+            var sure= confirm('Are you sure?');
+            if (sure) {
+
+                if (statusid == 3) {
+                    $("#myModal").modal()
+                    var ID1 = document.getElementById('StatusID');
+                    ID1.value = statusid;
+                    var ID2 = document.getElementById('ReferralID');
+                    ID2.value = referralid;
+                    var ID3 = document.getElementById('JobID');
+                    ID3.value = jobid;
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("UpdateStatus", "HR")",
+
+                        data: { StatusID: statusid, ReferralID: referralid },
+                    success: function (data) {
+                        toastr.options = {
+                            "closeButton": true,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-center",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr["info"](data.message, "Notification");
+
+
+                    }
+                });
+            }
+
+        }
+        else {
+                document.getElementById('dd1').value = Previous
+
+
+    }
+
+
+
+    });
+    });
+
+    </script>

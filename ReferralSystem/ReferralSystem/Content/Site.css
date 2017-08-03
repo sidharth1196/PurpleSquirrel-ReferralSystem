@@ -1,0 +1,178 @@
+﻿
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+html{ height:100%; }
+body{ min-height:100%; padding:0; margin:0; position:relative;
+      
+}
+
+body::after{ content:''; display:block; height:100px; }
+
+
+
+
+
+.navbar-fixed-top {
+    top: 0;
+    border-width: 0 0 1px;
+    border-radius: 0;
+     position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    
+}
+
+
+
+
+
+
+.navbar-fixed-bottom {
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+
+.navbar {
+    
+    position: relative;
+    min-height: 50px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+}
+
+    footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        background-color:#333;
+        color:lightgrey;
+    }
+
+    @media screen and (max-width: 767px) {
+
+        .row.content {
+            height: auto;
+        }
+    }
+
+    body {
+        padding-top: 70px;
+        padding-bottom: 20px;
+        background-color: white;
+    }
+
+    /* Set padding to keep content from hitting the edges */
+    .body-content {
+        padding-left: 15px;
+        padding-right: 15px;
+        
+    }
+
+    /* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+    .dl-horizontal dt {
+        white-space: normal;
+    }
+
+    /* Set width on the form input elements since they're 100% wide by default */
+    input,
+    select,
+    textarea {
+        max-width: 280px;
+    }
+
+
+
+
+
+
+
+
+ 
+/*HORIZONTAL LINE STYLING*/
+hr.style-four {
+    height: 12px;
+    border: 0;
+    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-right li:link,
+.navbar-right li:visited {
+    padding: 8px 0px;
+    color: #fff; 
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 90%;
+    border-bottom: 2px solid #e67e22 transparent ;
+    transition: border-bottom 0.2s; 
+
+}
+
+.navbar-right li:hover,
+.navbar-right li:active{
+    border-bottom: 2px solid #e67e22;
+}
+
+
+
+.btn{
+    background-color:#f26522;
+    color:white;
+    align-self:center;
+}
+
+ .btn:hover {
+        color: black;
+        text-decoration: none;
+    }
+
+.well{
+    background-color:#e6e4c2;
+    padding: 5px;
+}
+
+.grad1 {
+    
+
+   background: -webkit-linear-gradient(top , #e6e4c2 0%,  #c3be6e 100%);
+  background: linear-gradient(to bottom , #e6e4c2  0%, #c3be6e 100%);
+}
+.grad2 {
+    
+
+    background: linear-gradient(#e6e4c2,#dcd9aa); /* Standard syntax (must be last) */
+}
+.candidatePage {
+    background: linear-gradient(#e6e4c2,#dcd9aa);
+    height: 350px;
+}
+
+.toggle {
+    float: right;
+    margin-left: 10px;
+    background-color: #f26522;
+}
+
+.logo {
+    height: 70px;
+    width: auto;
+    float: left;
+    margin: 10px 0;
+}

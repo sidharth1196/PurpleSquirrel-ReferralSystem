@@ -1,0 +1,402 @@
+﻿@model ReferralSystem.ServiceContracts.JobVacancyViewModel
+@{
+    ViewBag.Title = "Purple Squirrel-Jobs";
+
+    Layout = "~/Views/Shared/HRLayout.cshtml";
+
+}
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container well" style="background-color:white;">
+    <div class="col-md-6">
+        <h2>Jobs</h2>
+    </div>
+    <div class="col-md-6 text-right " style="padding-top:20px; padding-left:-160px;">
+        <button type="button" class="btn" data-toggle="modal" data-target="#addJobModal">Add Job Vacancy</button>
+    </div>
+</div>
+
+<div style="clear:both"></div>
+   
+<div class="container" style="overflow-y:scroll; height:550px;">
+
+    @foreach (var item in Model.DisplayViewModel)
+
+    {
+        
+        <div class="row well" style="background-color: #e6e4c2">
+            <div class="row well" style="background-color: #e1dfb6">
+                <div class="col-md-1" style="padding:5px;">
+                    <i class="fa fa-black-tie" style="font-size:40px;color:#333;"></i>
+                </div>
+                <div class="col-md-9" style="font-size:20px; margin-top:15px;">
+                    <text>@item.Post</text>
+
+                </div>
+                <div class="col-md-2">
+
+                    <div class="row">
+                        <input style="float:left;" type="checkbox" id="toggle-demo@(item.JobID)" data-size="small" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="warning" />
+
+                        <button style="align-self:center; font-size:smaller;" type="button" class="btn" data-toggle="modal" data-target="#updateJobModal" onclick="updateJS('@item.JobID','@item.Post','@item.Bonus','@item.Experience','@item.Vacancy','@item.Description')">Update</button>
+                    </div>
+
+                    <script>
+
+                if (@item.Active==1)
+
+                    $('#toggle-demo@(item.JobID)').bootstrapToggle('on')
+                else
+                    $('#toggle-demo@(item.JobID)').bootstrapToggle('off')
+
+
+
+            $(function() {
+                $('#toggle-demo@(item.JobID)').change(function() {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("ActiveInactive","JobVacancy")",
+                        data: {
+                            JobID:@item.JobID ,
+                        },
+                    });
+                });
+            });
+                    </script>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="row">
+                        <div class="col-md-2" style="padding:5px;">
+                            <i class="fa fa-inr" style="font-size:30px;color:#333;"></i>
+                        </div>
+                        <div class="col" style="font-size:15px; margin-top:10px;">
+                            <text>@item.Bonus</text>
+                            Referral Bonus
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2" style="padding:5px;">
+                            <i class="fa fa-handshake-o" style="font-size:30px;color:#333;"></i>
+                        </div>
+                        <div class="col" style="font-size:15px; margin-top:10px;">
+                            <text>@item.Experience</text> Years of Experience Required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-2" style="padding:5px;">
+                            <i class="fa fa-table" style="font-size:30px;color:#333;"></i>
+                        </div>
+                        <div class="col" style="font-size:15px; margin-top:10px;">
+                            <text>@item.Vacancy</text> Vacancies Left
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2" style="padding:5px;">
+                            <i class="fa fa-file" style="font-size:30px;color:#333;"></i>
+                        </div>
+                        <div class="col" style="font-size:15px;margin-top:10px;">
+                            <text>@item.Description</text>
+                        </div>
+                    </div>
+                </div>
+                
+         </div>
+   </div>     
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#AddJobSubmit").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddJob","JobVacancy")",
+                data: {
+                    Post: $("#addJobTitle").val(),
+                    Bonus: $("#Bonus").val(),
+                    Experience: $("#Experience").val(),
+                    Vacancy: $("#Vacancy").val(),
+                    Description: $("#Description").val(),
+                },
+                success: function (data) {
+                    alert(data.message);
+                    location.reload();
+                }
+            });
+        });
+    });
+    $(document).ready(function () {
+        $("#UpdateJobSubmit").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateJob","JobVacancy")",
+                data: {
+                    Post: $("#updateJobTitle").val(),
+                    Bonus: $("#updateBonus").val(),
+                    Experience: $("#updateExperience").val(),
+                    Vacancy: $("#updateVacancy").val(),
+                    Description: $("#updateDescription").val(),
+                    JobID: $("#updateJobID").val(),
+                },
+                success: function (data) {
+                    alert(data.message);
+                    location.reload();
+                }
+            });
+        });
+    });
+    $(document).ready(function () {
+        $("#RemoveJobSubmit").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveJob","JobVacancy")",
+                data: {
+                    JobID: $('#removeJobID').val(),
+                },
+                success: function (data) {
+                    alert(data.message);
+                    location.reload();
+                }
+            });
+        });
+    });
+    function updateJS(jobD1,jobD2,jobD3,jobD4,jobD5,jobD6)
+    {
+        var ID = document.getElementById('updateJobID');
+        ID.value = jobD1;
+        var JT = document.getElementById('updateJobTitle');
+        JT.value = jobD2;
+        var B = document.getElementById('updateBonus');
+        B.value = jobD3;
+        var E = document.getElementById('updateExperience');
+        E.value = jobD4;
+        var V = document.getElementById('updateVacancy');
+        V.value = jobD5;
+        var D = document.getElementById('updateDescription');
+        D.value = jobD6;
+    }
+    function removeJS(jobD1,jobD2)
+    {
+        var ID = document.getElementById('removeJobID');
+        ID.value = jobD1;
+        var Title = document.getElementById('removeJobTitle');
+        Title.value = jobD2;
+    }
+    function myFunction() {
+        document.getElementById("myForm").reset();
+    }
+</script>
+
+    <div class="modal fade" id="updateJobModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                    <h4 class="modal-title">Update Job </h4>
+                </div>
+                <div class="modal-body">
+                    <fieldset>
+                        
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Job Title</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="updateJobTitle" required/>
+                                    <br />
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Bonus</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="updateBonus" required/>
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Experience</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="updateExperience" />
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Vacancies</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="updateVacancy" />
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Description</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="updateDescription" />
+                                    <br />
+                                </div>
+                                <input type="hidden" id="updateJobID" />
+                            </div>
+                    </fieldset>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="button" class="btn " id="UpdateJobSubmit" value="Submit" />
+                   
+                </div>
+            </div>
+
+    </div>
+</div>
+<div class="modal fade" id="addJobModal" role="dialog" >
+    <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" onclick="myFunction();">&times;</button>
+                    <h4 class="modal-title">Add Job</h4>
+                </div>
+                <div class="modal-body">
+                    <fieldset>
+                        <form id="myForm">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Job Title</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="addJobTitle" placeholder="Job Title" required/>
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Bonus</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="Bonus" placeholder="Bonus" required/>
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Experience</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="Experience" placeholder="Experience" />
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Vacancies</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="Vacancy" placeholder="No. of vacancies" />
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Description</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="Description" placeholder="Description">
+                                    <br />
+                                </div>
+                            </div>
+                            </form>
+</fieldset>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"  onclick="myFunction();">Cancel</button>
+                    <input type="button" class="btn" id="AddJobSubmit" value="Submit" data-dismiss="modal"/>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<div class="modal fade" id="removeConfirm" role="dialog">
+    <div class="modal-dialog">
+
+        
+        
+         Modal content       <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirm Remove Job</h4>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Job Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="removeJobTitle" >
+                        </div>
+                    </div>
+                    <input type="hidden" id="removeJobID" />
+                    <div class="col-md-offset-7">
+                        <input type="button" class="btn btn-success" id="RemoveJobSubmit" value="Submit" />
+                    </div>
+                    
+                </fieldset>
+            </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="button" class="btn" id="RemoveJobSubmit" value="Submit" />
+                   
+                </div>
+            </div>
+
+    </div>
+</div>
+
+-->
